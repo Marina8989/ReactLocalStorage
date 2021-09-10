@@ -7,11 +7,9 @@ class App extends React.Component {
     state={
         list: [],
         searchInput: '',
-        score: null
+        sort: null
     }
-    // setInStorage = (list) => {
-    //   window.localStorage.setItem('list', JSON.stringify(list));
-    // }
+   
     handleSubmit = (value) => {
         const item = {
             id: `${Math.floor(Math.random() * 30)}`,
@@ -20,7 +18,7 @@ class App extends React.Component {
         }
        const newList = [...this.state.list, item];
        this.setState({list: newList});
-       //this.setInStorage(newList);
+       window.localStorage.setItem('list', JSON.stringify(newList));
     }
     handleToggle = (item) => {
        const newList = this.state.list.map(element => {
@@ -30,28 +28,54 @@ class App extends React.Component {
            return element;
        })
        this.setState({list: newList});
-       //this.setInStorage(newList)
+       window.localStorage.setItem('list', JSON.stringify(newList));
     }
     handleRemove = (item) => {
        const newList = this.state.list.filter(element => element.id !== item.id);
        this.setState({list: newList});
-       //this.setState(newList);
+       window.localStorage.setItem('list', JSON.stringify(newList));
     }
     handleSearch = (e) => {
        this.setState({searchInput: e.target.value});
     }
-    // componentDidMount() {
-    //     this.setState({
-    //         list: JSON.parse(window.localStorage.getItem('list')) || []
-    //     })
-    // }
+    handlePriority = (item, value) => {
+      const newList = this.state.list.map(el => {
+          if(el.id === item.id){
+              el.priority = Number(value);
+          }
+          return el;
+      })
+      this.setState({list: newList});
+      window.localStorage.setItem('list', JSON.stringify(newList));
+    }
+    handleSort = () => {
+        if(this.state.sort === null) {
+          this.setState({sort: true});
+        }
+        if(this.state.sort === true) {
+          this.setState({sort: false})
+        }
+        if(this.state.sort === false) {
+          this.setState({sort: null})
+        }
+    }
+    componentDidMount() {
+        const list = JSON.parse(window.localStorage.getItem('list')) || [];
+        this.setState({list})
+    }
     render() {
-        const newList = this.state.list.filter(el => el.value.includes(this.state.searchInput))
+        let newList = this.state.list.filter(el => el.value.includes(this.state.searchInput))
+          if(this.state.sort !== null) {
+            newList = newList.sort((a,b) => {
+                return this.state.sort ? a.priority - b.priority : b.priority - a.priority;
+            })
+          }
         return(
             <div>
                 <h2>ToDo App</h2>
                 <Form handleSubmit={this.handleSubmit} handleSearch={this.handleSearch}/>
-                <List list={newList} handleToggle={this.handleToggle} handleRemove={this.handleRemove}/>
+                <List list={newList} handleToggle={this.handleToggle} handleRemove={this.handleRemove} handlePriority={this.handlePriority}/>
+                {this.state.list.length > 0 && <button onClick={() => this.handleSort()}>sort</button>}
             </div>
         )
     }
