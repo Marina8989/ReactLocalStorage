@@ -5,7 +5,9 @@ import './index.css';
 
 class App extends React.Component {
     state={
-        list: []
+        list: [],
+        searchInput: '',
+        score: null
     }
     // setInStorage = (list) => {
     //   window.localStorage.setItem('list', JSON.stringify(list));
@@ -35,17 +37,21 @@ class App extends React.Component {
        this.setState({list: newList});
        //this.setState(newList);
     }
+    handleSearch = (e) => {
+       this.setState({searchInput: e.target.value});
+    }
     // componentDidMount() {
     //     this.setState({
     //         list: JSON.parse(window.localStorage.getItem('list')) || []
     //     })
     // }
     render() {
+        const newList = this.state.list.filter(el => el.value.includes(this.state.searchInput))
         return(
             <div>
                 <h2>ToDo App</h2>
-                <Form handleSubmit={this.handleSubmit} />
-                <List list={this.state.list} handleToggle={this.handleToggle} handleRemove={this.handleRemove}/>
+                <Form handleSubmit={this.handleSubmit} handleSearch={this.handleSearch}/>
+                <List list={newList} handleToggle={this.handleToggle} handleRemove={this.handleRemove}/>
             </div>
         )
     }

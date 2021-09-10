@@ -15,9 +15,12 @@ class Form extends React.Component {
     }
     render() {
         return(
+            <>
             <form onSubmit={this.handleSubmit}>
                 <input placeholder={"Enter value..."} value={this.state.inputValue} onChange={this.handleChange} style={{border: '1px solid green'}}/>
             </form>
+            <input onChange={this.props.handleSearch} placeholder={"Search value..."} style={{border: '1px solid green'}}/>
+           </>
         )
     }
 }
