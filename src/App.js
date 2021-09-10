@@ -5,10 +5,15 @@ class App extends React.Component {
     state={
         list: []
     }
+    handleSubmit = (value) => {
+       const newList = [...this.state.list, value];
+       this.setState({list: newList});
+    }
     render() {
         return(
             <div>
-                <Form />
+                <h2>ToDo App</h2>
+                <Form handleSubmit={this.handleSubmit} />
             </div>
         )
     }
