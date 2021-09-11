@@ -1,24 +1,12 @@
 import React from 'react';
 
-const Item = ({item, handleToggle, handleRemove, handlePriority}) => {
-   const handleChange = (e) => {
-      handlePriority(item, e.target.value);
-   }
+const Item = (props) => {
     return(
-        <>
-          <li className={item.completed ? 'toggle' : ''}>
-           {item.value}
-           <button onClick={() => handleToggle(item)}>toggle</button>
-           <button onClick={() => handleRemove(item)}>remove</button>
-           <select onChange={handleChange} style={{color: 'green'}}>
-             <option value={1}>1</option>
-             <option value={2}>2</option>
-             <option value={3}>3</option>
-             <option value={4}>4</option>
-             <option value={5}>5</option>
-           </select>
-          </li> 
-        </>
+        <li className={props.item.completed ? 'toggle' : ''}>
+          {props.item.value}
+          <button onClick={() => props.handleToggle(props.item)} style={{marginLeft: '10px', color: 'green'}}>toggle</button>
+          <button onClick={() => props.handleRemove(props.item)} style={{marginLeft: '10px', color: 'green'}}>remove</button>
+        </li>
     )
 }
 
